@@ -1,22 +1,39 @@
+from random import randint
+
 import pygame
 
-pygame.init()
-size = width, height = 300, 200
-screen = pygame.display.set_mode(size)
-screen.fill("white")
+if __name__ == '__main__':
+    pygame.init()
+    pygame.display.set_caption('Жёлтый круг')
+    size = width, height = randint(200, 1024), randint(200, 768)
+    screen = pygame.display.set_mode(size)
+    screen.fill('blue')
 
-color = pygame.Color("red")
-brick = (30, 15)
-shift = 15
-clearance = 2
+    running = True
+    x_pos = 0
+    y_pos = 0
+    color_circle = pygame.Color('yellow')
+    r = 0
+    v = 10
+    fps = 30
+    clock = pygame.time.Clock()
+    drawing = False
 
-for i in range(0, size[1], brick[1] + clearance):
-    for j in range(0, size[0], brick[0] + clearance):
-        if i % 2 != 0:
-            j -= shift
-        pygame.draw.rect(screen, color, (j, i, brick[0], brick[1]))
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                screen.fill('blue')
+                x_pos, y_pos = event.pos
+                if drawing:
+                    r = 0
+                else:
+                    drawing = True
+        if drawing:
+            pygame.draw.circle(screen, color_circle, (x_pos, y_pos), r)
+            r += v / fps
+            clock.tick(fps)
 
-pygame.display.flip()
-while pygame.event.wait().type != pygame.QUIT:
-    pass
-pygame.quit()
+        pygame.display.flip()
+    pygame.quit()
